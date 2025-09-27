@@ -8,8 +8,6 @@ module Execute_Memory (
   input ALUSrc,
   output zero,
   output [31:0] ReadData,
-  output [31:0] ALUResult,
-  output [31:0] ReadData,
   output [31:0] ALUResult
 );
 
@@ -33,10 +31,10 @@ module Execute_Memory (
 
   data_memory dmemory (
     .clk(clk),
-    .A(ALUResult),
-    .WD(WriteData),
-    .WE(MemWrite),
-    .RD(ReadData)
+    .A(ALUResult), //endereço
+    .WD(WriteData), // Dado de escrita
+    .WE(MemWrite), // Enable de escrita
+    .RD(ReadData) // Dado de leitura
   );
     
 endmodule
