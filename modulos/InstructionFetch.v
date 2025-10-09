@@ -14,20 +14,20 @@ wire[31:0] wireNext_PC;
 assign wireNext_PC = next_PC;
 
 instruction_memory IMemory (
-    .A(PC),
-    .RD(inst)
+    .A(PC), //entrada
+    .RD(inst) //saída
 );
 
 PC pc (
     .rst(rst),
     .clk(clk),
-    .next_PC(wireNext_PC),
-    .PC(PC)
+    .next_PC(wireNext_PC), // entrada
+    .PC(PC) //saída
 );
 
 always @ (*)
 begin
-    if ((branchFlag && zeroFlag) == 1)
+    if ((branchFlag == 1) & (zeroFlag == 1))
     begin
         next_PC = PC + branchOffset;
         flush = 1;

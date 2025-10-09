@@ -1,12 +1,13 @@
 module InstructionDecode (
-    input clk,
+    input clk, WE,
     input [31:0] Instr, WB,
+    input [4:0] WA,
     output [31:0] Ain, Bin, ImmExt,
     // outputs do controle
     output [1:0] ResultSrc, // passivel de mudança por conta do jal, teoricamente não entra em estados não previstos
     output MemWrite,
     output RegWrite,
-    output Branch
+    output Branch,
     output ALUSrc,
     output [2:0] ALUControl
 );
@@ -30,11 +31,11 @@ register_file rf (
     .clk(clk),
     .A1(Instr[19:15]), // endereço de leitura A
     .A2(Instr[24:20]), // endereço de leitura B
-    .A3(Instr[11:7]), // endereço de escrita
+    .A3(WA), // endereço de escrita
     .WD3(WB), // dado de escrita
     .RD1(Ain), // dado de leitura A
     .RD2(Bin), // dado de leitura B
-    .WE(RegWrite) // write enable
+    .WE(WE) // write enable
 );
 
 SignExtend signextend (
