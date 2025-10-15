@@ -3,6 +3,7 @@ module topo (
 );
 
 // CUIDAR COM TIPOS REG E WIRE, MANTER REGS NOS FF`S APENAS
+// ALTERAÇÕES PARA UTILIZAÇÃO DA FPU INCOMPLETOS, NÃO VAI FUNCIONAR
 
 // sinais do IF
 wire [31:0] branchOffset, inst, WB;
@@ -31,6 +32,7 @@ wire [1:0] ResultSrc;
 wire MemWrite, RegWrite, ALUSrc;
 wire [2:0] ALUControl;
 wire [2:0]F3WIRE;
+wire [31:0] FAin, FBin;
 
 InstructionDecode ID (
     .clk(clk),
@@ -41,20 +43,25 @@ InstructionDecode ID (
     .Branch(branchFlag),
     .Ain(Ain), // FF A
     .Bin(Bin), // FF B
+    .floatRegisterAin(FAin), //FF fA
+    .floatRegisterBin(FBin), // FF fb
     .ImmExt(ImmExt), // FF IMM
     .ResultSrc(ResultSrc), // FF CTRL
     .MemWrite(MemWrite), // FF CTRL
     .RegWrite(RegWrite), // FF CTRL
+    //.RegWriteF(RegWriteF)
     .ALUSrc(ALUSrc), // FF CTRL
     .ALUControl(ALUControl) // FF CTRL
 
 );
 
-// flip flops A, B e IMM
+// flip flops A, B, IMM, fA e fB
 wire [31:0] Aout, Bout;
-reg [31:0] A, B, IMM;
+reg [31:0] A, B, IMM, FA, FB;
 always @ (posedge clk) A <= Ain;
 always @ (posedge clk) B <= Bin;
+always @ (posedge clk) FA <= FAin;
+always @ (posedge clk) FB <= FBin;
 always @ (posedge clk) IMM <= ImmExt;
 
 assign branchOffset = IMM;
@@ -111,16 +118,16 @@ Execute_Memory EXMEM (
     .funct3(F3WIRE)
 );
 
-// flip flops D e D
+// flip flops D e M
 reg [31:0] ALUR;
 reg [31:0] MR;
-always @ (posedge clk) ALUR <= ALUResult;
-always @ (posedge clk) MR <= ReadData;
+always @ (posedge clk) ALUR <= ALUResult; // ALU Result do estágio MEM/WB
+always @ (posedge clk) MR <= ReadData; // Memory Result do estágio MEM/WB
 wire [31:0] ALURWIRE, MRWIRE;
 assign ALURWIRE = ALUR;
 assign MRWIRE = MR;
-// flip flop controle
 
+// flip flop controle
 reg [31:0] RS2;
 reg [4:0] II2;
 reg WER2;
