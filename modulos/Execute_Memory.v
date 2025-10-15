@@ -2,12 +2,15 @@ module Execute_Memory (
   input [31:0] ImmExt,
   input [31:0] WriteData,
   input [31:0] SrcA,
+  // instanciar duas entradas da FPU (A e B)
+  // instanciar também o select da FPU
+  // instanciar dois controles de muxes de 1 bit
   input [2:0] ALUControl,
   input [2:0] funct3,
   input MemWrite,
   input clk,
   input ALUSrc,
-  output zero,
+  output zero, // Ver se existe este sinal para FPU
   output [31:0] ReadData,
   output [31:0] ALUResult
 );
@@ -29,6 +32,12 @@ module Execute_Memory (
     .ALUResult(ALUResult),
     .Zero(zero)
   );
+
+
+// instanciar dois muxes, um para a entrada da memória (decide se pega o dado de B ou fB), outro para a saida até o ff D (Decide se o dado vem da ULA ou FPU)
+// instanciar FPU com entrada dos novos sinais de input
+
+// em análise diagonal, 4 wires de 32 bits novos serão utilizados(para entrada e saída dos muxes), ver quais no esquemático
 
 /*  data_memory dmemory (
     .clk(clk),
