@@ -7,10 +7,12 @@ module Main_Decoder (
     output reg [1:0] ImmSrc,
     output reg RegWrite,
     output reg [1:0] ALUOp
+    // adicionar outputs necessarios, incluindo seletores de dois muxes e we para a FPU
     );
 
 always @ (*)
 begin
+    // Ver tabela com códigos das novas instruções
     casex (op)
         7'b0000011: begin //lw
             RegWrite = 1;
