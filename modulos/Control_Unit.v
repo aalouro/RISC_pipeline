@@ -9,6 +9,7 @@ module Control_Unit (
   input [2:0] funct3,
   input funct7,
   output [2:0] ALUControl
+  // Ver novos sinais necessários, talvez seja interessante criar FPU_Decoder, a discutir
 );
 
 
@@ -23,6 +24,7 @@ Main_Decoder maindecoder (
   .ImmSrc(ImmSrc),
   .RegWrite(RegWrite),
   .ALUOp(ALUOp)
+  // sinais referentes a fpu, incluindo seletor, we, seletor de muxes
 );
 
 ULA_Decoder uladecoder (
