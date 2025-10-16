@@ -94,8 +94,8 @@ begin
             ALUOp = 2'b00;
 
             RegWriteF = 1;
-            MemSrc = 1;
-            DSrc = 1;
+            MemSrc = 1'bx; // Indiferente
+            DSrc = 0;
         end
         
         7'b0100111: begin //fsw
@@ -109,8 +109,8 @@ begin
             ALUOp = 2'b00;
 
             RegWriteF = 0;
-            MemSrc = 1;
-            DSrc = 1;
+            MemSrc = 1; // Tem de ser 1 pois escreve na memória
+            DSrc = 0;
         
         end
 
@@ -127,7 +127,7 @@ begin
             MemSrc = 1'bx; // Memória não utilizada
             DSrc = 1;
         end
-        
+
         default: begin
             RegWrite = 0;
             ImmSrc = 2'bxx;
