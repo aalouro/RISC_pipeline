@@ -128,7 +128,7 @@ assign ALURWIRE = ALUR;
 assign MRWIRE = MR;
 
 // flip flop controle
-reg [31:0] RS2;
+reg [31:0] RS2; // Ver se é necessario tantos bits, aparentemente são necessários apenas 2
 reg [4:0] II2;
 reg WER2;
 always @ (posedge clk)
