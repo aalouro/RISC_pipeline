@@ -1,13 +1,16 @@
 module Main_Decoder (
     input [6:0] op,
     output reg Branch,
-    output reg [1:0] ResultSrc,
+    output reg [1:0] ResultSrc, // mux de WB, um bit a mais por conta do jal
     output reg MemWrite,
     output reg ALUSrc,
     output reg [1:0] ImmSrc,
     output reg RegWrite,
-    output reg [1:0] ALUOp
+    output reg [1:0] ALUOp,
+    output reg RegWriteF, // WE RFF
     // adicionar outputs necessarios, incluindo seletores de dois muxes e we para a FPU
+    output reg MemSrc, // Seletor mux da memória
+    output reg DSrc // Seletor mux da saída ULA/FPU
     );
 
 always @ (*)
@@ -22,6 +25,10 @@ begin
             ResultSrc = 2'b01;
             Branch = 0;
             ALUOp = 2'b00;
+            // referente a FPU
+            RegWriteF = 0;
+            MemSrc = 0;
+            DSrc = 0;
         end
         7'b0100011: begin //sw
             RegWrite = 0;
@@ -31,6 +38,10 @@ begin
             ResultSrc = 2'bx;
             Branch = 0;
             ALUOp = 2'b00;
+            // referente a FPU
+            RegWriteF = 0;
+            MemSrc = 0;
+            DSrc = 0;
         end
         7'b0110011: begin //r-type
             RegWrite = 1;
@@ -40,6 +51,10 @@ begin
             ResultSrc = 2'b00;
             Branch = 0;
             ALUOp = 2'b10;
+            // referente a FPU
+            RegWriteF = 0;
+            MemSrc = 0;
+            DSrc = 0;
         end
         7'b1100011: begin //beq
             RegWrite = 0;
@@ -49,6 +64,10 @@ begin
             ResultSrc = 2'bxx;
             Branch = 1;
             ALUOp = 2'b01;
+            // referente a FPU
+            RegWriteF = 0;
+            MemSrc = 0;
+            DSrc = 0;
         end
         7'b0010011: begin // I-type
             RegWrite = 1'b1;
@@ -58,6 +77,29 @@ begin
             ResultSrc = 2'b00; // Result comes from ALU
             Branch = 0; // No branching
             ALUOp = 2'b10; // ALU operation for I-type instructions
+            // referente a FPU
+            RegWriteF = 0;
+            MemSrc = 0;
+            DSrc = 0;
+        end
+
+        // SEÇÃO DE INSTRUCÕES F (OLHAR QUAIS SÃO OS SINAIS)
+        7'b0000111: begin // flw
+            RegWriteF = 1;
+            MemSrc = 1;
+            DSrc = 1;
+        end
+        
+        7'b0100111: begin //fsw
+            
+        end
+
+        7'b1010011: begin // Tipo fp (Análogo ao R)
+            
+        end
+
+        7'b1010011: begin // Tipo fcvt
+            
         end
 
         default: begin
@@ -68,6 +110,7 @@ begin
             ResultSrc = 1'bx;
             Branch = 0;
             ALUOp = 2'b00;
+            RegWriteF = 0;
         end
     endcase
 end
