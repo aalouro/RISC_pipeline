@@ -49,7 +49,10 @@ InstructionDecode ID (
     .ResultSrc(ResultSrc), // FF CTRL
     .MemWrite(MemWrite), // FF CTRL
     .RegWrite(RegWrite), // FF CTRL
-    //.RegWriteF(RegWriteF)
+    .RegWriteF(RegWriteF) // FF CTRL (PRECISA INSTANCIAR O WIRE E FAZER O ROTEAMENTO POSTERIOR)
+    .selFPU(selFPU), // FF CTRL (PRECISA INSTANCIAR O WIRE E FAZER O ROTEAMENTO POSTERIOR)
+    .MemSrc(MemSrc), // FF CTRL (PRECISA INSTANCIAR O WIRE E FAZER O ROTEAMENTO POSTERIOR)
+    .DSrc(DSrc), // FF CTRL (PRECISA INSTANCIAR O WIRE E FAZER O ROTEAMENTO POSTERIOR)
     .ALUSrc(ALUSrc), // FF CTRL
     .ALUControl(ALUControl) // FF CTRL
 
