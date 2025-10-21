@@ -1,5 +1,7 @@
 module Control_Unit (
   input [6:0] op,
+  input [4:0] funct5,
+  input [2:0] rm,
   output [1:0]ResultSrc,
   output Branch,
   output MemWrite,
@@ -8,8 +10,12 @@ module Control_Unit (
   output RegWrite,
   input [2:0] funct3,
   input funct7,
-  output [2:0] ALUControl
-  // Ver novos sinais necessários, talvez seja interessante criar FPU_Decoder, a discutir
+  output [2:0] ALUControl,
+  output [4:0] selFPU,
+  output RegWriteF,
+  output MemSrc,
+  output DSrc
+
 );
 
 
@@ -23,8 +29,12 @@ Main_Decoder maindecoder (
   .ALUSrc(ALUSrc),
   .ImmSrc(ImmSrc),
   .RegWrite(RegWrite),
-  .ALUOp(ALUOp)
+  .ALUOp(ALUOp),
   // sinais referentes a fpu, incluindo seletor, we, seletor de muxes
+  .RegWriteF(RegWriteF),
+  .MemSrc(MemSrc),
+  .DSrc(DSrc)
+
 );
 
 ULA_Decoder uladecoder (
@@ -33,6 +43,12 @@ ULA_Decoder uladecoder (
   .funct3(funct3),
   .funct7(funct7),
   .ALUControl(ALUControl)
+);
+
+FPU_Decoder fpudecoder (
+  .funct5(funct5),
+  .rm(rm),
+  .sel(selFPU)
 );
 
 endmodule
