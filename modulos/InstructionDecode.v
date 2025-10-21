@@ -11,13 +11,20 @@ module InstructionDecode (
     //output RegWriteF,
     output Branch,
     output ALUSrc,
-    output [2:0] ALUControl
+    output [2:0] ALUControl,
+    output [4:0] selFPU,
+    output RegWriteF,
+    output MemSrc,
+    output DSrc
+
 );
 
 wire [1:0] ImmSrc;
 
 Control_Unit control (
   .op(Instr[6:0]),
+  .funct5(Instr[31:27]),
+  .rm(Instr[14:12]),
   .ResultSrc(ResultSrc), //out
   .MemWrite(MemWrite),//out
   .ALUSrc(ALUSrc),//out
@@ -28,6 +35,10 @@ Control_Unit control (
   .funct7(Instr[30]),
   .Branch(Branch), // falgBranch
   .ALUControl(ALUControl)//out
+  .selFPU(selFPU),
+  .RegWriteF(RegWriteF),
+  .MemSrc(MemSrc),
+  .DSrc(DSrc)
 );
 
 register_file rfx (
