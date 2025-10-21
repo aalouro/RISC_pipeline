@@ -2,6 +2,8 @@ module Execute_Memory (
   input [31:0] ImmExt,
   input [31:0] WriteData,
   input [31:0] SrcA,
+  input MemSrc,
+  input DSrc,
   // instanciar duas entradas da FPU (A e B)
   // instanciar também o select da FPU
   // instanciar dois controles de muxes de 1 bit
@@ -12,10 +14,11 @@ module Execute_Memory (
   input ALUSrc,
   output zero, // Ver se existe este sinal para FPU
   output [31:0] ReadData,
-  output [31:0] ALUResult
 );
 
-  wire [31:0] SrcB;
+// MÓDULO INCOMPLETO, FALTA A FPU E SEUS SINAIS, ALÉM DE COMPLETAR MUXES
+
+  wire [31:0] SrcB, ALUResult, FPUResult;
   wire [5:0] deslocado;
   
   mux2x1_32bits muxin (
@@ -33,7 +36,23 @@ module Execute_Memory (
     .Zero(zero)
   );
 
+  FPU fpu (
 
+  );
+
+  mux2x1_32bits muxin ( // mux de entrada para a memória
+    .inA(InBFPU), // entrada B da FPU
+    .inB(WriteData),
+    .sel(MemSrc),
+    .out()
+  );
+
+  mux2x1_32bits muxin ( // mux para saída da AUL/FPU
+    .inA(ALUResult),
+    .inB(FPUResult),
+    .sel(DSrc),
+    .out()
+  );
 // instanciar dois muxes, um para a entrada da memória (decide se pega o dado de B ou fB), outro para a saida até o ff D (Decide se o dado vem da ULA ou FPU)
 // instanciar FPU com entrada dos novos sinais de input
 
